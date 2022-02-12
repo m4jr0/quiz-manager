@@ -1,10 +1,11 @@
-from pathlib import Path
+import abc
+
 from random import randrange
 
 from misc.interval import Interval
 
 
-class VocBuilder:
+class AsbtractVocBuilder(metaclass=abc.ABCMeta):
     GRADE_ALL = "all"
     GRADE_SERF = "serf"
     GRADE_KNIGHT = "knight"
@@ -18,41 +19,17 @@ class VocBuilder:
         GRADE_KING,
     ]
 
-    __voc = None
-    __dir = Path(__file__).parent
+    _voc = None
 
     def __repr__(self):
-        return "VocBuilder[len(__voc): {voc_len}]".format(
-            voc_len=len(self.__voc) if self.__voc is not None else 0,
+        return "AbstractVocBuilder[len(_voc): {voc_len}]".format(
+            voc_len=len(self._voc) if self._voc is not None else 0,
         )
 
     def __str__(self):
-        return "VocBuilder [{word_count} word(s)]".format(
-            word_count=len(self.__voc) if self.__voc is not None else 0,
+        return "AbstractVocBuilder[{word_count} word(s)]".format(
+            word_count=len(self._voc) if self._voc is not None else 0,
         )
-
-    @staticmethod
-    def __get_value(line, start_index=0):
-        char_count = len(line)
-
-        if start_index > char_count:
-            return None
-
-        index = start_index
-        separator_quote = '"'
-        separator = ","
-        to_add = 1
-
-        if line[index] == separator_quote:
-            separator = separator_quote
-            to_add = 2
-            start_index += 1
-            index += 1
-
-        while index < char_count and line[index] != separator:
-            index += 1
-
-        return (line[start_index:index], index + to_add)
 
     @classmethod
     def __get_grades(cls, raw_grades):
@@ -132,60 +109,14 @@ class VocBuilder:
 
         return indexes
 
-    def __build_vocabulary(self, grades, indexes):
-        self.__voc = []
-
-        with open(
-            "{dir}/../training.csv".format(
-                dir=self.__dir,
-            ),
-            "r",
-        ) as file:
-            results = []
-            is_first = True
-
-            for line in file:
-                if is_first:
-                    is_first = False
-                    continue
-
-                index, cursor = self.__get_value(line)
-                grade, cursor = self.__get_value(line, cursor)
-                word, cursor = self.__get_value(line, cursor)
-                answer, cursor = self.__get_value(line, cursor)
-
-                index = int(index)
-
-                if not word or not answer:
-                    break
-
-                if grades is not None and grade.lower() not in grades:
-                    break
-
-                is_contained = indexes is None
-
-                if not is_contained:
-                    for interval in indexes:
-                        if interval.contains(index):
-                            is_contained = True
-                            break
-
-                if not is_contained:
-                    continue
-
-                self.__voc.append(
-                    {
-                        "index": index,
-                        "grade": grade,
-                        "word": word.strip(),
-                        "answer": answer.strip(),
-                    }
-                )
+    @abc.abstractmethod
+    def _build_vocabulary(self, grades, indexes):
+        return
 
     def initialize(self, raw_grades=None, raw_indexes=None):
         grades = self.__get_grades(raw_grades)
         indexes = self.__get_indexes(raw_indexes)
-        self.__build_vocabulary(
+        self._build_vocabulary(
             grades,
             indexes,
         )
@@ -194,11 +125,11 @@ class VocBuilder:
         self,
         grades=None,
     ):
-        if self.__voc is None:
+        if self._voc is None:
             print("Vocabulary not initialized.")
             return
 
-        count = len(self.__voc)
+        count = len(self._voc)
 
         if count <= 0:
             print("Nothing to see here...")
@@ -211,7 +142,7 @@ class VocBuilder:
         )
 
         while count > 0:
-            descr = self.__voc.pop(randrange(count))
+            descr = self._voc.pop(randrange(count))
             count -= 1
 
             print(

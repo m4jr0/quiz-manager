@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 import argparse
+import pathlib
 import sys
 
-from vocbuilder.vocbuilder import VocBuilder
+import builder.localvocbuilder as voc
 
 
 def main():
@@ -12,7 +13,10 @@ def main():
     parser.add_argument("--indexes", "-i", nargs="+", default=None)
     args = parser.parse_args()
 
-    builder = VocBuilder()
+    builder = voc.LocalVocBuilder(
+        pathlib.Path(__file__).parent.parent / "training.csv"
+    )
+
     builder.initialize(args.filter, args.indexes)
     builder.train()
 

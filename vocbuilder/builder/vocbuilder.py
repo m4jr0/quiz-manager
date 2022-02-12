@@ -121,6 +121,36 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
             indexes,
         )
 
+    def reset(self):
+        self._voc = []
+
+    def _handle_word(self, grades, indexes, index, grade, word, answer):
+        if not word or not answer:
+            return
+
+        if grades is not None and grade.lower() not in grades:
+            return
+
+        is_contained = indexes is None
+
+        if not is_contained:
+            for interval in indexes:
+                if interval.contains(index):
+                    is_contained = True
+                    break
+
+        if not is_contained:
+            return
+
+        self._voc.append(
+            {
+                "index": index,
+                "grade": grade,
+                "word": word.strip(),
+                "answer": answer.strip(),
+            }
+        )
+
     def train(
         self,
         grades=None,

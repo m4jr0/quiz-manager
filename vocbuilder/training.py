@@ -4,7 +4,8 @@ import argparse
 import pathlib
 import sys
 
-import builder.localvocbuilder as voc
+import builder.gsheetvocbuilder as voc
+import configuration.settings as conf
 
 
 def main():
@@ -13,8 +14,18 @@ def main():
     parser.add_argument("--indexes", "-i", nargs="+", default=None)
     args = parser.parse_args()
 
-    builder = voc.LocalVocBuilder(
-        pathlib.Path(__file__).parent.parent / "training.csv"
+    file_dir = pathlib.Path(__file__).parent
+    settings = conf.Settings(file_dir.parent / "settings.json")
+    settings.initialize()
+
+    token_path = settings.get("gdrive")["token_path"]
+    sheet_id = settings.get("english")["sheet_id"]
+    range = settings.get("english")["range"]
+
+    builder = voc.GSheetVocBuilder(
+        file_dir / token_path,
+        sheet_id,
+        range,
     )
 
     builder.initialize(args.filter, args.indexes)

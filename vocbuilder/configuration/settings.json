@@ -1,0 +1,13 @@
+{
+  "gdrive": {
+    "token_path": null
+  },
+  "english": {
+    "sheet_id": null,
+    "range": null
+  },
+  "japanese": {
+    "sheet_id": null,
+    "range": null
+  }
+}

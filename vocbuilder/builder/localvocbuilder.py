@@ -46,7 +46,7 @@ class LocalVocBuilder(voc.AsbtractVocBuilder):
         return (line[start_index:index], index + to_add)
 
     def _build_vocabulary(self, grades, indexes):
-        self._voc = []
+        self.reset()
 
         with open(
             self._training_file_path,
@@ -64,31 +64,13 @@ class LocalVocBuilder(voc.AsbtractVocBuilder):
                 grade, cursor = self.__get_value(line, cursor)
                 word, cursor = self.__get_value(line, cursor)
                 answer, cursor = self.__get_value(line, cursor)
-
                 index = int(index)
 
-                if not word or not answer:
-                    break
-
-                if grades is not None and grade.lower() not in grades:
-                    break
-
-                is_contained = indexes is None
-
-                if not is_contained:
-                    for interval in indexes:
-                        if interval.contains(index):
-                            is_contained = True
-                            break
-
-                if not is_contained:
-                    continue
-
-                self._voc.append(
-                    {
-                        "index": index,
-                        "grade": grade,
-                        "word": word.strip(),
-                        "answer": answer.strip(),
-                    }
+                self._handle_word(
+                    grades,
+                    indexes,
+                    index,
+                    grade,
+                    word,
+                    answer,
                 )

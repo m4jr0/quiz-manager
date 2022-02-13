@@ -3,7 +3,7 @@ import pathlib
 import builder.vocbuilder as voc
 
 
-class LocalVocBuilder(voc.AsbtractVocBuilder):
+class CSVVocBuilder(voc.AsbtractVocBuilder):
     def __init__(self, training_file_path=None, is_reversed=False):
         super().__init__(is_reversed)
 
@@ -15,15 +15,17 @@ class LocalVocBuilder(voc.AsbtractVocBuilder):
             )
 
     def __repr__(self):
-        return "LocalVocBuilder[len(_voc): {voc_len}, _is_reversed: {is_reversed}]".format(
+        return "CSVVocBuilder[len(_voc): {voc_len}, _is_reversed: {is_reversed}]".format(
             voc_len=len(self._voc) if self._voc is not None else 0,
             is_reversed=self._is_reversed,
         )
 
     def __str__(self):
-        return "LocalVocBuilder[{question_count} question(s){reverse_label}]".format(
-            question_count=len(self._voc) if self._voc is not None else 0,
-            reverse_label="" if not is_reversed else " (reversed)",
+        return (
+            "CSVVocBuilder[{question_count} question(s){reverse_label}]".format(
+                question_count=len(self._voc) if self._voc is not None else 0,
+                reverse_label="" if not is_reversed else " (reversed)",
+            )
         )
 
     @staticmethod
@@ -33,8 +35,8 @@ class LocalVocBuilder(voc.AsbtractVocBuilder):
     ):
         char_count = len(line)
 
-        if start_index > char_count:
-            return None
+        if start_index > char_count - 1:
+            return None, start_index
 
         index = start_index
         separator_quote = '"'

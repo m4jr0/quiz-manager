@@ -4,16 +4,36 @@ import argparse
 import pathlib
 import sys
 
-import builder.gsheetvocbuilder as voc
+import builder.gsheetvocbuilder as gsheetvoc
+import builder.csvvocbuilder as csvvoc
 import configuration.settings as conf
+
+
+def file_path(path):
+    if pathlib.Path(path).is_file():
+        return path
+
+    else:
+        raise NotAFileError(path)
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--filter", "-f", nargs="+", default=None)
     parser.add_argument("--indexes", "-i", nargs="+", default=None)
+    parser.add_argument("--local", "-l", type=file_path)
     parser.add_argument("--reversed", "-r", default=False, action="store_true")
     args = parser.parse_args()
+
+    if args.local is not None:
+        builder = csvvoc.CSVVocBuilder(
+            args.local,
+            args.reversed,
+        )
+
+        builder.initialize(args.filter, args.indexes)
+        builder.train()
+        return
 
     file_dir = pathlib.Path(__file__).parent
     settings = conf.Settings(file_dir.parent / "settings.json")
@@ -24,7 +44,7 @@ def main():
     sheet = settings.get("english")["sheet"]
     range = settings.get("english")["range"]
 
-    builder = voc.GSheetVocBuilder(
+    builder = gsheetvoc.GSheetVocBuilder(
         file_dir / token_path,
         spreadsheet_id,
         sheet,

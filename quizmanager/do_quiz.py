@@ -108,7 +108,7 @@ def main():
 
     if args.csv_path is not None:
         quiz_manager = csvquiz.CSVQuizManager(
-            args.csv_local,
+            args.csv_path,
             args.is_reversed,
         )
 

@@ -158,6 +158,7 @@ class GSheetQuizManager(quiz.AsbtractQuizManager):
             grade = row[1]
             question = row[2]
             answer = row[3]
+            notes = row[4] if len(row) >= 5 else ""
 
             self._handle_question(
                 grades,
@@ -166,4 +167,5 @@ class GSheetQuizManager(quiz.AsbtractQuizManager):
                 grade,
                 question,
                 answer,
+                notes,
             )

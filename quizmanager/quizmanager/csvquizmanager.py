@@ -75,6 +75,7 @@ class CSVQuizManager(quiz.AsbtractQuizManager):
                 grade, cursor = self.__get_value(line, cursor)
                 question, cursor = self.__get_value(line, cursor)
                 answer, cursor = self.__get_value(line, cursor)
+                notes, cursor = self.__get_value(line, cursor)
                 index = int(index)
 
                 self._handle_question(
@@ -84,4 +85,5 @@ class CSVQuizManager(quiz.AsbtractQuizManager):
                     grade,
                     question,
                     answer,
+                    notes,
                 )

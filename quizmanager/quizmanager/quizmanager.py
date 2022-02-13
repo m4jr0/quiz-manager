@@ -160,6 +160,7 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
         grade,
         question,
         answer,
+        notes,
     ):
         if not question or not answer:
             return
@@ -184,6 +185,7 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
                 "grade": grade,
                 "question": question.strip(),
                 "answer": answer.strip(),
+                "notes": notes.strip(),
             }
         )
 
@@ -223,6 +225,12 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
 
         return descr["answer"]
 
+    def _get_notes(
+        self,
+        descr,
+    ):
+        return descr["notes"]
+
     def _display_answer(
         self,
         descr,
@@ -230,6 +238,16 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
         print(
             "Answer:\n{answer}\n".format(
                 answer=self._get_answer(descr),
+            )
+        )
+
+    def _display_notes(
+        self,
+        descr,
+    ):
+        print(
+            "Note(s):\n{notes}\n".format(
+                notes=self._get_notes(descr),
             )
         )
 
@@ -266,6 +284,7 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
             self._display_question(descr)
             self._handle_input(descr)
             self._display_answer(descr)
+            self._display_notes(descr)
             self._display_separator(descr)
 
         print("You did it!")

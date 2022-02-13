@@ -1,31 +1,29 @@
 import pathlib
 
-import builder.vocbuilder as voc
+import quizmanager.quizmanager as quiz
 
 
-class CSVVocBuilder(voc.AsbtractVocBuilder):
-    def __init__(self, training_file_path=None, is_reversed=False):
+class CSVQuizManager(quiz.AsbtractQuizManager):
+    def __init__(self, quiz_file_path=None, is_reversed=False):
         super().__init__(is_reversed)
 
-        if training_file_path is not None:
-            self._training_file_path = training_file_path
+        if quiz_file_path is not None:
+            self.__quiz_file_path = quiz_file_path
         else:
-            self._training_file_path = (
-                pathlib.Path(__file__).parent / "training.csv"
-            )
+            self.__quiz_file_path = pathlib.Path(__file__).parent / "quiz.csv"
 
     def __repr__(self):
-        return "CSVVocBuilder[len(_voc): {voc_len}, _is_reversed: {is_reversed}]".format(
-            voc_len=len(self._voc) if self._voc is not None else 0,
+        return "CSVQuizManager[len(_quiz): {quiz_len}, __quiz_file_path: {quiz_file_path}, _is_reversed: {is_reversed}]".format(
+            quiz_len=len(self._quiz) if self._quiz is not None else 0,
+            quiz_file_path=self.__quiz_file_path,
             is_reversed=self._is_reversed,
         )
 
     def __str__(self):
-        return (
-            "CSVVocBuilder[{question_count} question(s){reverse_label}]".format(
-                question_count=len(self._voc) if self._voc is not None else 0,
-                reverse_label="" if not is_reversed else " (reversed)",
-            )
+        return "CSVQuizManager[{question_count} question(s){reverse_label} [{quiz_file_path}]]".format(
+            question_count=len(self._quiz) if self._quiz is not None else 0,
+            reverse_label="" if not is_reversed else " (reversed)",
+            quiz_file_path=self.__quiz_file_path,
         )
 
     @staticmethod
@@ -54,7 +52,7 @@ class CSVVocBuilder(voc.AsbtractVocBuilder):
 
         return (line[start_index:index], index + to_add)
 
-    def _build_vocabulary(
+    def _build_quiz(
         self,
         grades,
         indexes,
@@ -62,7 +60,7 @@ class CSVVocBuilder(voc.AsbtractVocBuilder):
         self.reset()
 
         with open(
-            self._training_file_path,
+            self.__quiz_file_path,
             "r",
         ) as file:
             results = []

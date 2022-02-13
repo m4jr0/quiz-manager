@@ -1,10 +1,10 @@
 import pathlib
 
-import builder.vocbuilder as voc
+import quizmanager.quizmanager as quiz
 import handler.gdrivehandler as gdrive
 
 
-class GSheetVocBuilder(voc.AsbtractVocBuilder):
+class GSheetQuizManager(quiz.AsbtractQuizManager):
     __gdrive_handler = None
     __spreadsheet_id = None
     __sheet = None
@@ -42,14 +42,14 @@ class GSheetVocBuilder(voc.AsbtractVocBuilder):
         self.__range = range
 
     def __repr__(self):
-        return "GSheetVocBuilder[len(_voc): {voc_len}, _is_reversed: {is_reversed}]".format(
-            voc_len=len(self._voc) if self._voc is not None else 0,
+        return "GSheetQuizManager[len(_quiz): {quiz_len}, _is_reversed: {is_reversed}]".format(
+            quiz_len=len(self._quiz) if self._quiz is not None else 0,
             is_reversed=self._is_reversed,
         )
 
     def __str__(self):
-        return "GSheetVocBuilder[{question_count} question(s){reverse_label}]".format(
-            question_count=len(self._voc) if self._voc is not None else 0,
+        return "GSheetQuizManager[{question_count} question(s){reverse_label}]".format(
+            question_count=len(self._quiz) if self._quiz is not None else 0,
             reverse_label="" if not is_reversed else " (reversed)",
         )
 
@@ -152,7 +152,7 @@ class GSheetVocBuilder(voc.AsbtractVocBuilder):
 
         self._handle_new_grade(descr)
 
-    def _build_vocabulary(
+    def _build_quiz(
         self,
         grades,
         indexes,

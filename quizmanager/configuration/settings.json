@@ -1,7 +1,4 @@
 {
-  "gdrive": {
-    "token_path": null
-  },
   "english_voc": {
     "spreadsheet_id": null,
     "sheet": null,

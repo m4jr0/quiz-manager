@@ -5,8 +5,8 @@ import pathlib
 import sys
 import traceback
 
-import builder.gsheetvocbuilder as gsheetvoc
-import builder.csvvocbuilder as csvvoc
+import quizmanager.gsheetquizmanager as gsheetquiz
+import quizmanager.csvquizmanager as csvquiz
 import configuration.settings as conf
 
 
@@ -107,13 +107,13 @@ def main():
     is_debug = args.is_debug
 
     if args.csv_path is not None:
-        builder = csvvoc.CSVVocBuilder(
+        quiz_manager = csvquiz.CSVQuizManager(
             args.csv_local,
             args.is_reversed,
         )
 
-        builder.initialize(args.raw_filters, args.raw_indexes)
-        builder.train()
+        quiz_manager.initialize(args.raw_filters, args.raw_indexes)
+        quiz_manager.do_quiz()
         return
 
     file_dir = pathlib.Path(__file__).parent
@@ -144,7 +144,7 @@ def main():
     sheet = spreadsheet_descr["sheet"]
     range = spreadsheet_descr["range"]
 
-    builder = gsheetvoc.GSheetVocBuilder(
+    quiz_manager = gsheetquiz.GSheetQuizManager(
         token_path,
         spreadsheet_id,
         sheet,
@@ -152,8 +152,8 @@ def main():
         args.is_reversed,
     )
 
-    builder.initialize(args.raw_filters, args.raw_indexes)
-    builder.train()
+    quiz_manager.initialize(args.raw_filters, args.raw_indexes)
+    quiz_manager.do_quiz()
 
 
 if __name__ == "__main__":

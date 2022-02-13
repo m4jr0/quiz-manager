@@ -5,7 +5,7 @@ from random import randrange
 from misc.interval import Interval
 
 
-class AsbtractVocBuilder(metaclass=abc.ABCMeta):
+class AsbtractQuizManager(metaclass=abc.ABCMeta):
     GRADE_ALL = "All"
     GRADE_SERF = "Serf"
     GRADE_KNIGHT = "Knight"
@@ -21,18 +21,18 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
 
     GRADES_LOWERCASE = []
 
-    _voc = None
+    _quiz = None
     _is_reversed = False
 
     def __repr__(self):
-        return "AbstractVocBuilder[len(_voc): {voc_len}, _is_reversed: {is_reversed}]".format(
-            voc_len=len(self._voc) if self._voc is not None else 0,
+        return "AsbtractQuizManager[len(_quiz): {quiz_len}, _is_reversed: {is_reversed}]".format(
+            quiz_len=len(self._quiz) if self._quiz is not None else 0,
             is_reversed=self._is_reversed,
         )
 
     def __str__(self):
-        return "AbstractVocBuilder[{question_count} question(s){reverse_label}]".format(
-            question_count=len(self._voc) if self._voc is not None else 0,
+        return "AsbtractQuizManager[{question_count} question(s){reverse_label}]".format(
+            question_count=len(self._quiz) if self._quiz is not None else 0,
             reverse_label="" if not is_reversed else " (reversed)",
         )
 
@@ -127,7 +127,7 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
         return indexes
 
     @abc.abstractmethod
-    def _build_vocabulary(
+    def _build_quiz(
         self,
         grades,
         indexes,
@@ -144,13 +144,13 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
 
         grades = self.__get_grades(raw_grades)
         indexes = self.__get_indexes(raw_indexes)
-        self._build_vocabulary(
+        self._build_quiz(
             grades,
             indexes,
         )
 
     def reset(self):
-        self._voc = []
+        self._quiz = []
 
     def _handle_question(
         self,
@@ -178,7 +178,7 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
         if not is_contained:
             return
 
-        self._voc.append(
+        self._quiz.append(
             {
                 "index": index,
                 "grade": grade,
@@ -239,15 +239,15 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
     ):
         print("**************************************************\n")
 
-    def train(
+    def do_quiz(
         self,
         grades=None,
     ):
-        if self._voc is None:
-            print("Vocabulary not initialized.")
+        if self._quiz is None:
+            print("Quiz not initialized.")
             return
 
-        count = len(self._voc)
+        count = len(self._quiz)
 
         if count <= 0:
             print("Nothing to see here...")
@@ -260,7 +260,7 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
         )
 
         while count > 0:
-            descr = self._voc.pop(randrange(count))
+            descr = self._quiz.pop(randrange(count))
             count -= 1
 
             self._display_question(descr)

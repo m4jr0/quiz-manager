@@ -2,12 +2,12 @@
   "gdrive": {
     "token_path": null
   },
-  "english": {
+  "english_voc": {
     "spreadsheet_id": null,
     "sheet": null,
     "range": null
   },
-  "japanese": {
+  "japanese_voc": {
     "spreadsheet_id": null,
     "sheet": null,
     "range": null

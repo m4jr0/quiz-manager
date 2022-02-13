@@ -3,10 +3,14 @@
 import argparse
 import pathlib
 import sys
+import traceback
 
 import builder.gsheetvocbuilder as gsheetvoc
 import builder.csvvocbuilder as csvvoc
 import configuration.settings as conf
+
+
+is_debug = False
 
 
 def file_path(path):
@@ -14,45 +18,141 @@ def file_path(path):
         return path
 
     else:
-        raise NotAFileError(path)
+        raise FileNotFoundError(path)
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--filter", "-f", nargs="+", default=None)
-    parser.add_argument("--indexes", "-i", nargs="+", default=None)
-    parser.add_argument("--local", "-l", type=file_path)
-    parser.add_argument("--reversed", "-r", default=False, action="store_true")
-    args = parser.parse_args()
 
-    if args.local is not None:
-        builder = csvvoc.CSVVocBuilder(
-            args.local,
-            args.reversed,
+    parser.add_argument(
+        "--filter",
+        "-f",
+        nargs="+",
+        default=None,
+        dest="raw_filters",
+        help="argument(s) to provide to filter specific questions",
+    )
+
+    parser.add_argument(
+        "--indexes",
+        "-i",
+        nargs="+",
+        default=None,
+        dest="raw_indexes",
+        help="index(es) to provide to filter specific questions",
+    )
+
+    parser.add_argument(
+        "--local",
+        "-l",
+        type=file_path,
+        dest="csv_path",
+        help='CSV file path. If provided, the program will be in a "local mode"',
+    )
+
+    parser.add_argument(
+        "--document",
+        "-d",
+        type=str,
+        dest="spreadsheet_descr_key",
+        help="spreadsheet key in the settings file provided",
+    )
+
+    parser.add_argument(
+        "--token",
+        "-t",
+        type=file_path,
+        dest="token_path",
+        help="token file path. If not given, a default token.json file in the script's folder will be read",
+    )
+
+    parser.add_argument(
+        "--settings",
+        "-s",
+        type=file_path,
+        dest="settings_path",
+        help="settings file path. If not given, a default settings.json file in the script's folder will be read",
+    )
+
+    parser.add_argument(
+        "--reversed",
+        "-r",
+        default=False,
+        action="store_true",
+        dest="is_reversed",
+        help="whether to enable the reverse mode or not. If enabled, the answers will be displayed as questions, and questions as answers",
+    )
+
+    parser.add_argument(
+        "--debug",
+        default=False,
+        action="store_true",
+        dest="is_debug",
+        help="whether to enable the debug mode or not",
+    )
+
+    try:
+        args = parser.parse_args()
+
+    except FileNotFoundError as error:
+        raise Exception(
+            "File not found: {error}".format(
+                error=error,
+            )
         )
 
-        builder.initialize(args.filter, args.indexes)
+        return
+
+    global is_debug
+    is_debug = args.is_debug
+
+    if args.csv_path is not None:
+        builder = csvvoc.CSVVocBuilder(
+            args.csv_local,
+            args.is_reversed,
+        )
+
+        builder.initialize(args.raw_filters, args.raw_indexes)
         builder.train()
         return
 
     file_dir = pathlib.Path(__file__).parent
-    settings = conf.Settings(file_dir.parent / "settings.json")
+    token_path = args.token_path
+
+    if token_path is None:
+        token_path = file_dir / "token.json"
+
+    settings_path = args.settings_path
+
+    if settings_path is None:
+        settings_path = file_dir / "settings.json"
+
+    if args.spreadsheet_descr_key is None:
+        print("Please provide a spreadsheet description key")
+        return
+
+    settings = conf.Settings(settings_path)
     settings.initialize()
 
-    token_path = settings.get("gdrive")["token_path"]
-    spreadsheet_id = settings.get("english")["spreadsheet_id"]
-    sheet = settings.get("english")["sheet"]
-    range = settings.get("english")["range"]
+    spreadsheet_descr = settings.get(args.spreadsheet_descr_key)
+
+    if spreadsheet_descr is None:
+        print("Please provide spreadsheet description in the settings file.")
+        return
+
+    spreadsheet_id = spreadsheet_descr["spreadsheet_id"]
+    sheet = spreadsheet_descr["sheet"]
+    range = spreadsheet_descr["range"]
 
     builder = gsheetvoc.GSheetVocBuilder(
-        file_dir / token_path,
+        token_path,
         spreadsheet_id,
         sheet,
         range,
-        args.reversed,
+        args.is_reversed,
     )
 
-    builder.initialize(args.filter, args.indexes)
+    builder.initialize(args.raw_filters, args.raw_indexes)
     builder.train()
 
 
@@ -66,11 +166,15 @@ if __name__ == "__main__":
         pass
 
     except Exception as error:
-        print(
-            "An error occurred: {error}. Aborting.".format(
-                error=error,
+        if is_debug:
+            print(traceback.format_exc())
+
+        else:
+            print(
+                "An error occurred: {error}. Aborting.".format(
+                    error=error,
+                )
             )
-        )
 
         error_code = 1
 

@@ -10,13 +10,13 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
     GRADE_SERF = "Serf"
     GRADE_KNIGHT = "Knight"
     GRADE_WIZARD = "Wizard"
-    GRADE_KING = "King"
+    GRADE_GOD = "God"
 
     GRADES = [
         GRADE_SERF,
         GRADE_KNIGHT,
         GRADE_WIZARD,
-        GRADE_KING,
+        GRADE_GOD,
     ]
 
     GRADES_LOWERCASE = []
@@ -139,15 +139,15 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
         raw_grades=None,
         raw_indexes=None,
     ):
+        for grade in self.GRADES:
+            self.GRADES_LOWERCASE.append(grade.lower())
+
         grades = self.__get_grades(raw_grades)
         indexes = self.__get_indexes(raw_indexes)
         self._build_vocabulary(
             grades,
             indexes,
         )
-
-        for grade in self.GRADES:
-            self.GRADES_LOWERCASE.append(grade.lower())
 
     def reset(self):
         self._voc = []

@@ -11,17 +11,6 @@ class GSheetQuizManager(quiz.AsbtractQuizManager):
     __range = None
     __grades_dict = {}
 
-    YES_COMMANDS = [
-        "y",
-        "yea",
-        "yeah",
-        "yes",
-        "sure",
-        "why not",
-        "please",
-        "yes.avi",
-    ]
-
     def __init__(
         self,
         token_path,
@@ -89,15 +78,17 @@ class GSheetQuizManager(quiz.AsbtractQuizManager):
         self,
         descr,
     ):
-        raw_new_grade = input("\n(Press ENTER to cancel) New grade: ")
+        raw_new_grade = input(
+            "(Press ENTER to ignore) Set a new grade? New grade: "
+        )
 
         if not raw_new_grade:
-            print("Aborting.\n")
+            print("")
             return
 
         if raw_new_grade not in self.__grades_dict:
             print(
-                "\nInvalid grade: {grade}.".format(
+                "\nInvalid grade: {grade}.\n".format(
                     grade=raw_new_grade,
                 )
             )
@@ -138,18 +129,6 @@ class GSheetQuizManager(quiz.AsbtractQuizManager):
         descr,
     ):
         super()._display_answer(descr)
-        user_input = input("Set new grade? Answer: ")
-
-        if not user_input:
-            print("")
-            return
-
-        user_input = user_input.lower()
-
-        if user_input not in self.YES_COMMANDS:
-            print("")
-            return
-
         self._handle_new_grade(descr)
 
     def _build_quiz(

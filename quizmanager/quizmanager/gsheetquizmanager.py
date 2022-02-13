@@ -124,11 +124,11 @@ class GSheetQuizManager(quiz.AsbtractQuizManager):
             )
         )
 
-    def _display_answer(
+    def _display_notes(
         self,
         descr,
     ):
-        super()._display_answer(descr)
+        super()._display_notes(descr)
         self._handle_new_grade(descr)
 
     def _build_quiz(

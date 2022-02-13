@@ -245,9 +245,14 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
         self,
         descr,
     ):
+        notes = self._get_notes(descr)
+
+        if not notes:
+            return
+
         print(
             "Note(s):\n{notes}\n".format(
-                notes=self._get_notes(descr),
+                notes=notes,
             )
         )
 

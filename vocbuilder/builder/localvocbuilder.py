@@ -4,7 +4,9 @@ import builder.vocbuilder as voc
 
 
 class LocalVocBuilder(voc.AsbtractVocBuilder):
-    def __init__(self, training_file_path=None):
+    def __init__(self, training_file_path=None, is_reversed=False):
+        super().__init__(is_reversed)
+
         if training_file_path is not None:
             self._training_file_path = training_file_path
         else:
@@ -13,13 +15,15 @@ class LocalVocBuilder(voc.AsbtractVocBuilder):
             )
 
     def __repr__(self):
-        return "LocalVocBuilder[len(_voc): {voc_len}]".format(
+        return "LocalVocBuilder[len(_voc): {voc_len}, _is_reversed: {is_reversed}]".format(
             voc_len=len(self._voc) if self._voc is not None else 0,
+            is_reversed=self._is_reversed,
         )
 
     def __str__(self):
-        return "LocalVocBuilder[{word_count} word(s)]".format(
-            word_count=len(self._voc) if self._voc is not None else 0,
+        return "LocalVocBuilder[{question_count} question(s){reverse_label}]".format(
+            question_count=len(self._voc) if self._voc is not None else 0,
+            reverse_label="" if not is_reversed else " (reversed)",
         )
 
     @staticmethod
@@ -69,15 +73,15 @@ class LocalVocBuilder(voc.AsbtractVocBuilder):
 
                 index, cursor = self.__get_value(line)
                 grade, cursor = self.__get_value(line, cursor)
-                word, cursor = self.__get_value(line, cursor)
+                question, cursor = self.__get_value(line, cursor)
                 answer, cursor = self.__get_value(line, cursor)
                 index = int(index)
 
-                self._handle_word(
+                self._handle_question(
                     grades,
                     indexes,
                     index,
                     grade,
-                    word,
+                    question,
                     answer,
                 )

@@ -22,16 +22,25 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
     GRADES_LOWERCASE = []
 
     _voc = None
+    _is_reversed = False
 
     def __repr__(self):
-        return "AbstractVocBuilder[len(_voc): {voc_len}]".format(
+        return "AbstractVocBuilder[len(_voc): {voc_len}, _is_reversed: {is_reversed}]".format(
             voc_len=len(self._voc) if self._voc is not None else 0,
+            is_reversed=self._is_reversed,
         )
 
     def __str__(self):
-        return "AbstractVocBuilder[{word_count} word(s)]".format(
-            word_count=len(self._voc) if self._voc is not None else 0,
+        return "AbstractVocBuilder[{question_count} question(s){reverse_label}]".format(
+            question_count=len(self._voc) if self._voc is not None else 0,
+            reverse_label="" if not is_reversed else " (reversed)",
         )
+
+    def __init__(
+        self,
+        is_reversed=False,
+    ):
+        self._is_reversed = is_reversed
 
     @classmethod
     def __get_grades(
@@ -143,16 +152,16 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
     def reset(self):
         self._voc = []
 
-    def _handle_word(
+    def _handle_question(
         self,
         grades,
         indexes,
         index,
         grade,
-        word,
+        question,
         answer,
     ):
-        if not word or not answer:
+        if not question or not answer:
             return
 
         if grades is not None and grade.lower() not in grades:
@@ -173,7 +182,7 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
             {
                 "index": index,
                 "grade": grade,
-                "word": word.strip(),
+                "question": question.strip(),
                 "answer": answer.strip(),
             }
         )
@@ -183,12 +192,21 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
         descr,
     ):
         print(
-            "Word #{index}:\n{word} [{grade}]".format(
+            "Question #{index} [{grade}]:\n{question}".format(
                 index=descr["index"],
-                word=descr["word"],
                 grade=descr["grade"],
+                question=self._get_question(descr),
             )
         )
+
+    def _get_question(
+        self,
+        descr,
+    ):
+        if self._is_reversed:
+            return descr["answer"]
+
+        return descr["question"]
 
     def _handle_input(
         self,
@@ -196,11 +214,24 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
     ):
         input()
 
+    def _get_answer(
+        self,
+        descr,
+    ):
+        if self._is_reversed:
+            return descr["question"]
+
+        return descr["answer"]
+
     def _display_answer(
         self,
         descr,
     ):
-        print("Answer:\n{answer}\n".format(answer=descr["answer"]))
+        print(
+            "Answer:\n{answer}\n".format(
+                answer=self._get_answer(descr),
+            )
+        )
 
     def _display_separator(
         self,
@@ -223,7 +254,7 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
             return
 
         print(
-            "{count} word(s) to review!".format(
+            "{count} question(s) to review!".format(
                 count=count,
             )
         )

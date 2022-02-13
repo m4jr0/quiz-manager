@@ -12,6 +12,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--filter", "-f", nargs="+", default=None)
     parser.add_argument("--indexes", "-i", nargs="+", default=None)
+    parser.add_argument("--reversed", "-r", default=False, action="store_true")
     args = parser.parse_args()
 
     file_dir = pathlib.Path(__file__).parent
@@ -28,6 +29,7 @@ def main():
         spreadsheet_id,
         sheet,
         range,
+        args.reversed,
     )
 
     builder.initialize(args.filter, args.indexes)

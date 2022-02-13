@@ -32,7 +32,11 @@ class GDriveHandler:
             label="Loaded" if self.__is_initialized else "Not loaded",
         )
 
-    def __init__(self, token_path=None, scopes=None):
+    def __init__(
+        self,
+        token_path=None,
+        scopes=None,
+    ):
         self.__token_path = (
             pathlib.Path(token_path) if token_path is not None else None
         )
@@ -59,7 +63,11 @@ class GDriveHandler:
         self.__service = build("sheets", "v4", credentials=self.__creds)
         self.__sheet_service = self.__service.spreadsheets()
 
-    def fetch_values(self, sheet_id, range):
+    def fetch_values(
+        self,
+        sheet_id,
+        range,
+    ):
         result = (
             self.__sheet_service.values()
             .get(

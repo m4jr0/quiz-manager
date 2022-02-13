@@ -9,7 +9,12 @@ class GSheetVocBuilder(voc.AsbtractVocBuilder):
     __sheet_id = None
     __range = None
 
-    def __init__(self, token_path, sheet_id, range):
+    def __init__(
+        self,
+        token_path,
+        sheet_id,
+        range,
+    ):
         self.__gdrive_handler = gdrive.GDriveHandler(
             token_path, gdrive.GDriveHandler.SCOPE_SHEET_READONLY
         )
@@ -27,11 +32,19 @@ class GSheetVocBuilder(voc.AsbtractVocBuilder):
             word_count=len(self._voc) if self._voc is not None else 0,
         )
 
-    def initialize(self, raw_grades=None, raw_indexes=None):
+    def initialize(
+        self,
+        raw_grades=None,
+        raw_indexes=None,
+    ):
         self.__gdrive_handler.initialize()
         super().initialize(raw_grades, raw_indexes)
 
-    def _build_vocabulary(self, grades, indexes):
+    def _build_vocabulary(
+        self,
+        grades,
+        indexes,
+    ):
         self.reset()
 
         values = self.__gdrive_handler.fetch_values(

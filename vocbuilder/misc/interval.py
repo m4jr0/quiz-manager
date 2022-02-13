@@ -14,10 +14,18 @@ class Interval:
             max=self.__max,
         )
 
-    def __init__(self, x=0, y=0):
+    def __init__(
+        self,
+        x=0,
+        y=0,
+    ):
         self.set(x, y)
 
-    def set(self, x, y):
+    def set(
+        self,
+        x,
+        y,
+    ):
         if not isinstance(x, int):
             raise ValueError(
                 "Variable should be a number: {variable}.".format(
@@ -34,5 +42,8 @@ class Interval:
         self.__min = min(x, y)
         self.__max = max(x, y)
 
-    def contains(self, x):
+    def contains(
+        self,
+        x,
+    ):
         return self.__min <= x and x <= self.__max

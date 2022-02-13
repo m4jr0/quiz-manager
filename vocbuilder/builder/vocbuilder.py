@@ -32,7 +32,10 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
         )
 
     @classmethod
-    def __get_grades(cls, raw_grades):
+    def __get_grades(
+        cls,
+        raw_grades,
+    ):
         if raw_grades is None:
             return None
 
@@ -59,7 +62,10 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
 
         return grades
 
-    def __get_indexes(self, raw_indexes):
+    def __get_indexes(
+        self,
+        raw_indexes,
+    ):
         if raw_indexes is None:
             return None
 
@@ -110,10 +116,18 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
         return indexes
 
     @abc.abstractmethod
-    def _build_vocabulary(self, grades, indexes):
+    def _build_vocabulary(
+        self,
+        grades,
+        indexes,
+    ):
         return
 
-    def initialize(self, raw_grades=None, raw_indexes=None):
+    def initialize(
+        self,
+        raw_grades=None,
+        raw_indexes=None,
+    ):
         grades = self.__get_grades(raw_grades)
         indexes = self.__get_indexes(raw_indexes)
         self._build_vocabulary(
@@ -124,7 +138,15 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
     def reset(self):
         self._voc = []
 
-    def _handle_word(self, grades, indexes, index, grade, word, answer):
+    def _handle_word(
+        self,
+        grades,
+        indexes,
+        index,
+        grade,
+        word,
+        answer,
+    ):
         if not word or not answer:
             return
 
@@ -151,6 +173,31 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
             }
         )
 
+    def _print_question(
+        self,
+        descr,
+    ):
+        print(
+            "Word #{index}:\n{word} [{grade}]".format(
+                index=descr["index"],
+                word=descr["word"],
+                grade=descr["grade"],
+            )
+        )
+
+    def _handle_input(
+        self,
+        descr,
+    ):
+        input()
+
+    def _display_answer(
+        self,
+        descr,
+    ):
+        print("Answer:\n{answer}\n".format(answer=descr["answer"]))
+        print("**************************************************\n")
+
     def train(
         self,
         grades=None,
@@ -175,17 +222,8 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
             descr = self._voc.pop(randrange(count))
             count -= 1
 
-            print(
-                "Word #{index}:\n{word} [{grade}]".format(
-                    index=descr["index"],
-                    word=descr["word"],
-                    grade=descr["grade"],
-                )
-            )
-
-            input()
-
-            print("Answer:\n{answer}\n".format(answer=descr["answer"]))
-            print("**************************************************\n")
+            self._print_question(descr)
+            self._handle_input(descr)
+            self._display_answer(descr)
 
         print("You did it!")

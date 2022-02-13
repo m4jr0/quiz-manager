@@ -23,7 +23,10 @@ class LocalVocBuilder(voc.AsbtractVocBuilder):
         )
 
     @staticmethod
-    def __get_value(line, start_index=0):
+    def __get_value(
+        line,
+        start_index=0,
+    ):
         char_count = len(line)
 
         if start_index > char_count:
@@ -45,7 +48,11 @@ class LocalVocBuilder(voc.AsbtractVocBuilder):
 
         return (line[start_index:index], index + to_add)
 
-    def _build_vocabulary(self, grades, indexes):
+    def _build_vocabulary(
+        self,
+        grades,
+        indexes,
+    ):
         self.reset()
 
         with open(

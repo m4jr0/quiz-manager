@@ -16,7 +16,10 @@ class Settings:
             label="Loaded" if self.__is_initialized else "Not loaded",
         )
 
-    def __init__(self, settings_file_path=None):
+    def __init__(
+        self,
+        settings_file_path=None,
+    ):
         if settings_file_path is not None:
             self._settings_file_path = settings_file_path
         else:
@@ -32,5 +35,8 @@ class Settings:
         self.__load_file()
         __is_initialized = True
 
-    def get(self, key):
+    def get(
+        self,
+        key,
+    ):
         return self.__settings.get(key, None)

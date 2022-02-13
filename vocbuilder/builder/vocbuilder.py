@@ -6,11 +6,11 @@ from misc.interval import Interval
 
 
 class AsbtractVocBuilder(metaclass=abc.ABCMeta):
-    GRADE_ALL = "all"
-    GRADE_SERF = "serf"
-    GRADE_KNIGHT = "knight"
-    GRADE_WIZARD = "wizard"
-    GRADE_KING = "king"
+    GRADE_ALL = "All"
+    GRADE_SERF = "Serf"
+    GRADE_KNIGHT = "Knight"
+    GRADE_WIZARD = "Wizard"
+    GRADE_KING = "King"
 
     GRADES = [
         GRADE_SERF,
@@ -18,6 +18,8 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
         GRADE_WIZARD,
         GRADE_KING,
     ]
+
+    GRADES_LOWERCASE = []
 
     _voc = None
 
@@ -48,7 +50,7 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
                 grades = None
                 break
 
-            elif grade not in cls.GRADES:
+            elif grade not in cls.GRADES_LOWERCASE:
                 raise ValueError(
                     "Invalid grade: {grade}".format(
                         grade=raw_grade,
@@ -135,6 +137,9 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
             indexes,
         )
 
+        for grade in self.GRADES:
+            self.GRADES_LOWERCASE.append(grade.lower())
+
     def reset(self):
         self._voc = []
 
@@ -173,7 +178,7 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
             }
         )
 
-    def _print_question(
+    def _display_question(
         self,
         descr,
     ):
@@ -196,6 +201,11 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
         descr,
     ):
         print("Answer:\n{answer}\n".format(answer=descr["answer"]))
+
+    def _display_separator(
+        self,
+        descr,
+    ):
         print("**************************************************\n")
 
     def train(
@@ -222,8 +232,9 @@ class AsbtractVocBuilder(metaclass=abc.ABCMeta):
             descr = self._voc.pop(randrange(count))
             count -= 1
 
-            self._print_question(descr)
+            self._display_question(descr)
             self._handle_input(descr)
             self._display_answer(descr)
+            self._display_separator(descr)
 
         print("You did it!")

@@ -3,11 +3,13 @@
     "token_path": null
   },
   "english": {
-    "sheet_id": null,
+    "spreadsheet_id": null,
+    "sheet": null,
     "range": null
   },
   "japanese": {
-    "sheet_id": null,
+    "spreadsheet_id": null,
+    "sheet": null,
     "range": null
   }
 }

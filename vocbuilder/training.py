@@ -19,12 +19,14 @@ def main():
     settings.initialize()
 
     token_path = settings.get("gdrive")["token_path"]
-    sheet_id = settings.get("english")["sheet_id"]
+    spreadsheet_id = settings.get("english")["spreadsheet_id"]
+    sheet = settings.get("english")["sheet"]
     range = settings.get("english")["range"]
 
     builder = voc.GSheetVocBuilder(
         file_dir / token_path,
-        sheet_id,
+        spreadsheet_id,
+        sheet,
         range,
     )
 

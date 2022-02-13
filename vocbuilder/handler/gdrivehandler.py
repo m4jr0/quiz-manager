@@ -65,16 +65,52 @@ class GDriveHandler:
 
     def fetch_values(
         self,
-        sheet_id,
+        spreadsheet_id,
+        sheet,
         range,
     ):
+        if self.__is_initialized:
+            print("GDriveHandler not initialized. Returning None.")
+            return None
+
         result = (
             self.__sheet_service.values()
             .get(
-                spreadsheetId=sheet_id,
-                range=range,
+                spreadsheetId=spreadsheet_id,
+                range="{sheet}!{range}".format(
+                    sheet=sheet,
+                    range=range,
+                ),
             )
             .execute()
         )
 
         return result.get("values", [])
+
+    def update_cell(
+        self,
+        spreadsheet_id,
+        sheet,
+        range,
+        value_input_option,
+        body,
+    ):
+        if self.__is_initialized:
+            print("GDriveHandler not initialized. Returning False.")
+            return False
+
+        result = (
+            self.__sheet_service.values()
+            .update(
+                spreadsheetId=spreadsheet_id,
+                range="{sheet}!{range}".format(
+                    sheet=sheet,
+                    range=range,
+                ),
+                valueInputOption=value_input_option,
+                body=body,
+            )
+            .execute()
+        )
+
+        return result.get("updatedCells") > 0

@@ -9,7 +9,7 @@ class GSheetVocBuilder(voc.AsbtractVocBuilder):
     __sheet_id = None
     __range = None
 
-    def __init__(self, token_path, sheet_id, range=None):
+    def __init__(self, token_path, sheet_id, range):
         self.__gdrive_handler = gdrive.GDriveHandler(
             token_path, gdrive.GDriveHandler.SCOPE_SHEET_READONLY
         )

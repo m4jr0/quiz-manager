@@ -37,8 +37,9 @@ class GSheetQuizManager(quiz.AsbtractQuizManager):
         )
 
     def __str__(self):
-        return "GSheetQuizManager[{question_count} question(s){reverse_label}]".format(
+        return "GSheetQuizManager[{question_count} question{question_plural}{reverse_label}]".format(
             question_count=len(self._quiz) if self._quiz is not None else 0,
+            question_plural="" if self._quiz is None or len(self) <= 1 else "s",
             reverse_label="" if not is_reversed else " (reversed)",
         )
 
@@ -78,9 +79,7 @@ class GSheetQuizManager(quiz.AsbtractQuizManager):
         self,
         descr,
     ):
-        raw_new_grade = input(
-            "(Press ENTER to ignore) Set a new grade? New grade: "
-        )
+        raw_new_grade = input("~ (Press ENTER to ignore) New grade: ")
 
         if not raw_new_grade:
             print("")

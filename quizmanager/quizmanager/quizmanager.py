@@ -31,8 +31,9 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
         )
 
     def __str__(self):
-        return "AsbtractQuizManager[{question_count} question(s){reverse_label}]".format(
+        return "AsbtractQuizManager[{question_count} question{question_plural}{reverse_label}]".format(
             question_count=len(self._quiz) if self._quiz is not None else 0,
+            question_plural="" if self._quiz is None or len(self) <= 1 else "s",
             reverse_label="" if not is_reversed else " (reversed)",
         )
 
@@ -194,7 +195,7 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
         descr,
     ):
         print(
-            "Question #{index} [{grade}]:\n{question}".format(
+            "✿ Question #{index} [{grade}]:\n{question}".format(
                 index=descr["index"],
                 grade=descr["grade"],
                 question=self._get_question(descr),
@@ -236,7 +237,7 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
         descr,
     ):
         print(
-            "Answer:\n{answer}\n".format(
+            "► Answer:\n{answer}\n".format(
                 answer=self._get_answer(descr),
             )
         )
@@ -251,7 +252,7 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
             return
 
         print(
-            "Note(s):\n{notes}\n".format(
+            "✾ Note(s):\n{notes}\n".format(
                 notes=notes,
             )
         )
@@ -260,26 +261,35 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
         self,
         descr,
     ):
-        print("**************************************************\n")
+        print(
+            "════════════════════════════════════════════════════════════════════════════════\n"
+        )
 
     def do_quiz(
         self,
         grades=None,
     ):
+        print("❁ Hello. Let's do a little quiz, shall we?")
+
         if self._quiz is None:
-            print("Quiz not initialized.")
+            print("✣ Quiz not initialized. Aborting.")
             return
 
         count = len(self._quiz)
 
         if count <= 0:
-            print("Nothing to see here...")
+            print("✣ Nothing to see here...")
             return
 
         print(
-            "{count} question(s) to review!".format(
+            "✣ {count} question{plural} to review!\n".format(
                 count=count,
+                plural="" if count <= 1 else "s",
             )
+        )
+
+        print(
+            "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n"
         )
 
         while count > 0:
@@ -290,6 +300,12 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
             self._handle_input(descr)
             self._display_answer(descr)
             self._display_notes(descr)
-            self._display_separator(descr)
 
-        print("You did it!")
+            if count >= 1:
+                self._display_separator(descr)
+
+        print(
+            "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n"
+        )
+
+        print("❁ Well done, lad.")

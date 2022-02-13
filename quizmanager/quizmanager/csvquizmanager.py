@@ -20,8 +20,9 @@ class CSVQuizManager(quiz.AsbtractQuizManager):
         )
 
     def __str__(self):
-        return "CSVQuizManager[{question_count} question(s){reverse_label} [{quiz_file_path}]]".format(
+        return "CSVQuizManager[{question_count} question{question_plural}{reverse_label} [{quiz_file_path}]]".format(
             question_count=len(self._quiz) if self._quiz is not None else 0,
+            question_plural="" if self._quiz is None or len(self) <= 1 else "s",
             reverse_label="" if not is_reversed else " (reversed)",
             quiz_file_path=self.__quiz_file_path,
         )
@@ -51,6 +52,34 @@ class CSVQuizManager(quiz.AsbtractQuizManager):
             index += 1
 
         return (line[start_index:index], index + to_add)
+
+    def _display_answer(
+        self,
+        descr,
+    ):
+        print(
+            "► Answer:\n{answer}".format(
+                answer=self._get_answer(descr),
+            )
+        )
+
+        if self._get_notes(descr):
+            print()
+
+    def _display_notes(
+        self,
+        descr,
+    ):
+        notes = self._get_notes(descr)
+
+        if notes:
+            print(
+                "✾ Note(s):\n{notes}".format(
+                    notes=notes,
+                )
+            )
+
+        input()  # Allow the user to read the answer.
 
     def _build_quiz(
         self,

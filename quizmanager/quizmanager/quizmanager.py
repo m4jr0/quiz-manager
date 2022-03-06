@@ -7,6 +7,7 @@ from misc.interval import Interval
 
 class AsbtractQuizManager(metaclass=abc.ABCMeta):
     GRADE_ALL = "All"
+    GRADE_MISS = "Miss"
     GRADE_SERF = "Serf"
     GRADE_KNIGHT = "Knight"
     GRADE_WIZARD = "Wizard"
@@ -14,6 +15,7 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
 
     GRADES = [
         GRADE_SERF,
+        GRADE_MISS,
         GRADE_KNIGHT,
         GRADE_WIZARD,
         GRADE_GOD,

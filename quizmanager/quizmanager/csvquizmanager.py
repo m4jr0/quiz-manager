@@ -57,11 +57,7 @@ class CSVQuizManager(quiz.AsbtractQuizManager):
         self,
         descr,
     ):
-        print(
-            "► Answer:\n{answer}".format(
-                answer=self._get_answer(descr),
-            )
-        )
+        print(f"► Answer:\n{self._get_answer(descr)}")
 
         if self._get_notes(descr):
             print()
@@ -73,11 +69,7 @@ class CSVQuizManager(quiz.AsbtractQuizManager):
         notes = self._get_notes(descr)
 
         if notes:
-            print(
-                "✾ Note(s):\n{notes}".format(
-                    notes=notes,
-                )
-            )
+            print(f"✾ Note(s):\n{notes}")
 
         input()  # Allow the user to read the answer.
 

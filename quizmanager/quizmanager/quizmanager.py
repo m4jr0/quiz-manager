@@ -63,11 +63,7 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
                 break
 
             elif grade not in cls.GRADES_LOWERCASE:
-                raise ValueError(
-                    "Invalid grade: {grade}".format(
-                        grade=raw_grade,
-                    )
-                )
+                raise ValueError(f"Invalid grade: {raw_grade}")
 
             if grades is None:
                 grades = []
@@ -90,11 +86,7 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
             number_count = len(numbers)
 
             if number_count <= 0 or number_count > 2:
-                raise ValueError(
-                    "Invalid interval: {interval}".format(
-                        interval=raw_interval,
-                    )
-                )
+                raise ValueError(f"Invalid interval: {raw_interval}")
 
             if indexes is None:
                 indexes = []
@@ -104,11 +96,7 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
                 x = int(x)
 
             except ValueError:
-                raise ValueError(
-                    "Invalid interval value: {x}".format(
-                        x=x,
-                    )
-                )
+                raise ValueError(f"Invalid interval value: {x}")
 
             try:
                 if number_count == 1:
@@ -119,11 +107,7 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
                     y = int(y)
 
             except ValueError:
-                raise ValueError(
-                    "Invalid interval value: {y}".format(
-                        y=y,
-                    )
-                )
+                raise ValueError(f"Invalid interval value: {y}")
 
             indexes.append(Interval(x, y))
 
@@ -247,11 +231,7 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
         self,
         descr,
     ):
-        print(
-            "► Answer:\n{answer}\n".format(
-                answer=self._get_answer(descr),
-            )
-        )
+        print(f"► Answer:\n{self._get_answer(descr)}\n")
 
     def _display_notes(
         self,
@@ -262,11 +242,7 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
         if not notes:
             return
 
-        print(
-            "✾ Note(s):\n{notes}\n".format(
-                notes=notes,
-            )
-        )
+        print(f"✾ Note(s):\n{notes}\n")
 
     def _display_separator(
         self,

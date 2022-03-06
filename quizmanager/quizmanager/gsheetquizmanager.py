@@ -86,12 +86,7 @@ class GSheetQuizManager(quiz.AsbtractQuizManager):
             return
 
         if raw_new_grade not in self.__grades_dict:
-            print(
-                "\nInvalid grade: {grade}.\n".format(
-                    grade=raw_new_grade,
-                )
-            )
-
+            print(f"\nInvalid grade: {raw_new_grade}.\n")
             self._handle_new_grade(descr)
             return
 
@@ -100,9 +95,7 @@ class GSheetQuizManager(quiz.AsbtractQuizManager):
         is_ok = self.__gdrive_handler.update_cell(
             self.__spreadsheet_id,
             self.__sheet,
-            "B{cell_number}".format(
-                cell_number=descr["index"] + 1,
-            ),
+            f'B{descr["index"] + 1}',
             "RAW",
             {
                 "values": [
@@ -117,11 +110,7 @@ class GSheetQuizManager(quiz.AsbtractQuizManager):
             print("\nSomething wrong happened. Aborting.")
             return
 
-        print(
-            "\nNew grade set: {grade}.\n".format(
-                grade=new_grade,
-            )
-        )
+        print(f"\nNew grade set: {new_grade}.\n")
 
     def _display_notes(
         self,

@@ -27,17 +27,9 @@ class Interval:
         y,
     ):
         if not isinstance(x, int):
-            raise ValueError(
-                "Variable should be a number: {variable}.".format(
-                    variable=x,
-                )
-            )
+            raise ValueError(f"Variable should be a number: {x}.")
         elif not isinstance(y, int):
-            raise ValueError(
-                "Variable should be a number: {variable}.".format(
-                    variable=y,
-                )
-            )
+            raise ValueError(f"Variable should be a number: {y}.")
 
         self.__min = min(x, y)
         self.__max = max(x, y)

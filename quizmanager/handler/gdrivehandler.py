@@ -77,10 +77,7 @@ class GDriveHandler:
             self.__sheet_service.values()
             .get(
                 spreadsheetId=spreadsheet_id,
-                range="{sheet}!{range}".format(
-                    sheet=sheet,
-                    range=range,
-                ),
+                range=f"{sheet}!{range}",
             )
             .execute()
         )
@@ -103,10 +100,7 @@ class GDriveHandler:
             self.__sheet_service.values()
             .update(
                 spreadsheetId=spreadsheet_id,
-                range="{sheet}!{range}".format(
-                    sheet=sheet,
-                    range=range,
-                ),
+                range=f"{sheet}!{range}",
                 valueInputOption=value_input_option,
                 body=body,
             )

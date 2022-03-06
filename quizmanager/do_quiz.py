@@ -95,11 +95,7 @@ def main():
         args = parser.parse_args()
 
     except FileNotFoundError as error:
-        raise Exception(
-            "File not found: {error}".format(
-                error=error,
-            )
-        )
+        raise Exception(f"File not found: {error}")
 
         return
 
@@ -170,11 +166,7 @@ if __name__ == "__main__":
             print(traceback.format_exc())
 
         else:
-            print(
-                "An error occurred: {error}. Aborting.".format(
-                    error=error,
-                )
-            )
+            print(f"An error occurred: {error}. Aborting.")
 
         error_code = 1
 

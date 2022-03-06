@@ -144,8 +144,11 @@ class GSheetQuizManager(quiz.AsbtractQuizManager):
         )
 
         is_first = True
+        line_number = -1
 
         for row in values:
+            line_number += 1
+
             if is_first:
                 is_first = False
                 continue
@@ -153,7 +156,12 @@ class GSheetQuizManager(quiz.AsbtractQuizManager):
             if len(row) < 4:
                 continue
 
-            index = int(row[0])
+            try:
+                index = int(row[0])
+            except ValueError:
+                print(f"Invalid index at line {line_number}.")
+                raise
+
             grade = row[1]
             question = row[2]
             answer = row[3]

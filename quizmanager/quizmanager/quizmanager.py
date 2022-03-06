@@ -165,7 +165,16 @@ class AsbtractQuizManager(metaclass=abc.ABCMeta):
         answer,
         notes,
     ):
-        if not question or not answer:
+        if not question:
+            print(f'Warning: invalid question at index {index}: "{question}".')
+            return
+
+        if not answer:
+            print(f'Warning: invalid answer at index {index}: "{answer}".')
+            return
+
+        if grade not in self.GRADES:
+            print(f'Warning: invalid grade at index {index}: "{grade}".')
             return
 
         if grades is not None and grade.lower() not in grades:
